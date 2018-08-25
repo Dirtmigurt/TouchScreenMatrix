@@ -3,11 +3,13 @@
 #include<thread>
 #include<memory>
 #include<map>
-#include <list>
+#include<list>
+#include<chrono>
+#include<cmath>
 #include<linux/input.h>
 #include<fcntl.h>
 #include<unistd.h>
-#include<stdio.h>
+#include<cstdio>
 
 #include "led-matrix.h"
 #include "threaded-canvas-manipulator.h"

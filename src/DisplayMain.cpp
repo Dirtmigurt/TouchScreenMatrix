@@ -1,4 +1,4 @@
-#include"stdafx.h"
+#include"../include/stdafx.h"
 
 // Initialize static members
 DisplayMain::GameState DisplayMain::gameState = Uninitialized;

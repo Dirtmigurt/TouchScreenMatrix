@@ -1,4 +1,4 @@
-#include<stdafx.h>
+#include"../include/stdafx.h"
 
 InputEvent::InputEvent()
 {
@@ -9,8 +9,10 @@ InputEvent::InputEvent()
 
 InputEvent::InputEvent(int x, int y, FingerState state)
 {
-
-    PositionX = x;
-    PositionY = y;
+	// Scale x
+	double xPercent = (x - MinXRaw) / RangeX;
+	double yPercent = (y - MinYRaw) / RangeY;
+    PositionX = xPercent * DisplayMain::SCREEN_WIDTH;
+    PositionY = yPercent * DisplayMain::SCREEN_HEIGHT;
     State = state;
 }

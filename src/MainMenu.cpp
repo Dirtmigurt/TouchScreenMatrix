@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include"../include/stdafx.h"
 
 MainMenu::MenuResult MainMenu::Show(rgb_matrix::RGBMatrix* matrix, rgb_matrix::FrameCanvas* canvas)
 {
