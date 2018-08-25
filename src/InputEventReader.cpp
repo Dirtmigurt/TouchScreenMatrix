@@ -1,4 +1,4 @@
-#include<stdafx.h>
+#include"../include/stdafx.h"
 
 // Static member initializations
 InputEventReader::ReaderState InputEventReader::readerState = Uninitialized;
@@ -40,23 +40,22 @@ bool InputEventReader::IsExiting()
 void InputEventReader::ReadLoop() 
 {
 	// Open device
-	int fd = open("/dev/input/event2", O_RDONLY);
+	int fd = open("/dev/input/event2", O_RDONLY | O_CLOEXEC);
 	if (fd == -1)
 	{
-		fprintf(stderr, "%s is not a valid device\n");
-		return;
+		fprintf(stderr, "%s is not a valid device\n", "/dev/input/event2");
+		while (true) {};
 	}
 
 	int xValue = -1;
 	int yValue = -1;
 	int buttonTouch = 2;
-	struct input_event ev;
+	struct input_event ev{};
 	while (!IsExiting())
 	{
 		const size_t ev_size = sizeof(struct input_event);
-		ssize_t size;
 
-		size = read(fd, &ev, ev_size);
+		const size_t size = read(fd, &ev, ev_size);
 		if (size < ev_size)
 		{
 			close(fd);
@@ -66,10 +65,23 @@ void InputEventReader::ReadLoop()
 		switch (ev.type)
 		{
 			case EV_SYN:
-				// Input event has finished, push onto the queue
-				eventListMutex.lock();
-				inputEventQueue.push(new InputEvent(xValue, yValue, static_cast<InputEvent::FingerState>(buttonTouch)));
-				eventListMutex.unlock();
+				// Input event has finished, push onto the queue, only if it was received in the last 500ms.
+				auto now = std::chrono::system_clock::now();
+				const long nowMillis =std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+				const long eventMillis = (ev.time.tv_sec * 1000) + (ev.time.tv_usec / 1000);
+				if (nowMillis - eventMillis <= 500)
+				{
+					auto inEvent = new InputEvent(xValue, yValue, static_cast<InputEvent::FingerState>(buttonTouch));
+					if (inEvent->PositionX < 0 || inEvent->PositionX > DisplayMain::SCREEN_WIDTH || inEvent->PositionY < 0 || inEvent->PositionY > DisplayMain::SCREEN_HEIGHT)
+					{
+						delete inEvent;
+					}
+					else
+					{
+						std::unique_lock<std::mutex> queueLock(eventListMutex);
+						inputEventQueue.push(inEvent);
+					}
+				}
 
 				xValue = -1;
 				yValue = -1;

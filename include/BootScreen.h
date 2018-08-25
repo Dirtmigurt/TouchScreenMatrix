@@ -4,5 +4,5 @@
 class BootScreen
 {
 public:
-	void Show(rgb_matrix::RGBMatrix*, rgb_matrix::FrameCanvas*);
+	static void Show(rgb_matrix::RGBMatrix*, rgb_matrix::FrameCanvas*);
 };

@@ -1,4 +1,4 @@
-#include<stdafx.h>
+#include"../include/stdafx.h"
 
 int main(int argc, char * argv[])
 {
