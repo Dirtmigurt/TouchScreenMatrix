@@ -14,9 +14,13 @@ void DisplayMain::Start()
     // Initialize RGBMatrix
     rgb_matrix::RGBMatrix::Options matrix_options;
     rgb_matrix::RuntimeOptions runtime_opt;
+    runtime_opt.gpio_slowdown = 1;
     matrix_options.rows = SCREEN_HEIGHT;
+    matrix_options.cols = SCREEN_HEIGHT;
     matrix_options.chain_length = 2;
     matrix_options.parallel = 1;
+    matrix_options.hardware_mapping = "adafruit-hat-pwm";
+    matrix_options.brightness = 50;
     mainWindow = rgb_matrix::CreateMatrixFromOptions(matrix_options, runtime_opt);
     off_screen_canvas = mainWindow->CreateFrameCanvas();
 
