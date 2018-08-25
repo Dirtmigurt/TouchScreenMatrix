@@ -65,6 +65,7 @@ void InputEventReader::ReadLoop()
 		switch (ev.type)
 		{
 			case EV_SYN:
+			{
 				// Input event has finished, push onto the queue, only if it was received in the last 500ms.
 				auto now = std::chrono::system_clock::now();
 				const long nowMillis =std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
@@ -87,7 +88,7 @@ void InputEventReader::ReadLoop()
 				yValue = -1;
 				buttonTouch = 2;
 				break;
-
+			}
 			case EV_KEY:
 				buttonTouch = ev.value;
 				break;
