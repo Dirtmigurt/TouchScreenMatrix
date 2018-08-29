@@ -2,6 +2,7 @@
 
 // Initialize static members
 DisplayMain::GameState DisplayMain::gameState = Uninitialized;
+std::chrono::high_resolution_clock::time_point lastFrameTime = std::chrono::high_resolution_clock::now();
 rgb_matrix::RGBMatrix* DisplayMain::mainWindow = nullptr;
 rgb_matrix::FrameCanvas* DisplayMain::off_screen_canvas = nullptr;
 void DisplayMain::Start()
@@ -66,43 +67,66 @@ void DisplayMain::GameLoop()
             ShowMenu();
             break;
         }
-        case Playing:
+        case Showing12H:
         {
-            // clear the display
-            int x = 23;
-            // update all objects in the game object manager
-            // draw all objects in the game object manager
-
-            // show off_screen_canvas
-
-            // if currentEvent == exit then gameState = Exiting;
-            // if currentEvent == back then gameState = ShowingMenu;
+			break;
         }
+		case Showing24H:
+		{
+			break;
+	    }
+		case Showing3D:
+		{
+			break;
+		}
+		case ShowingBinary:
+		{
+			break;
+		}
+		case ShowingDate:
+		{
+			break;
+		}
+		case ShowingEvents:
+		{
+			break;
+		}
+		case ShowingImageViewer:
+		{
+			break;
+		}
+		case ShowingPaint:
+		{
+			break;
+		}
+		case ShowingProgress:
+		{
+			break;
+		}
+		case ShowingConfig:
+		{
+			break;
+		}
+		case Exiting:
+		{
+			break;
+		}
+    default: 
+		break;
     }
 }
 
 void DisplayMain::ShowBootScreen()
 {
-    BootScreen bootScreen;
+	BootScreen bootScreen;
+	bootScreen.Load();
     bootScreen.Show(mainWindow, off_screen_canvas);
-    gameState = DisplayMain::ShowingMenu;
+    gameState = ShowingMenu;
 }
 
 void DisplayMain::ShowMenu()
 {
     MainMenu mainMenu;
-    MainMenu::MenuResult result = mainMenu.Show(mainWindow, off_screen_canvas);
-    switch(result)
-    {
-        case MainMenu::Exit:
-        {
-            gameState  = Exiting;
-            break;
-        }
-        case MainMenu::Play:
-        {
-            gameState = Playing;
-            break;
-        }
-    }
+	mainMenu.Load();
+    gameState = mainMenu.Show(mainWindow, off_screen_canvas);
 }

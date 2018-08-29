@@ -1,38 +1,108 @@
 #include"../include/stdafx.h"
 
-MainMenu::MenuResult MainMenu::Show(rgb_matrix::RGBMatrix* matrix, rgb_matrix::FrameCanvas* canvas)
+void MainMenu::Load()
 {
-    for(int i = 0; i < DisplayMain::SCREEN_WIDTH; i++)
-    {
-        for(int j = 0; j < DisplayMain::SCREEN_HEIGHT; j++)
-        {
-            if (j < 32)
-            {
-                canvas->SetPixel(i, j, 0, 150, 0);
-            }
-            else
-            {
-                canvas->SetPixel(i, j, 150, 0, 0);
-            }
-        }
-    }
+	// create 12h menu item
+	MenuItem twelveHour;
+	twelveHour.ItemValue = DisplayMain::Showing12H;
+	twelveHour.Load("../icons/12H.bmp", 10, 11);
+	menuItems.push_back(twelveHour);
+
+	// create 24h menu item
+	MenuItem twentyfourHour;
+	twentyfourHour.ItemValue = DisplayMain::Showing24H;
+	twentyfourHour.Load("../icons/24H.bmp", 30, 11);
+	menuItems.push_back(twentyfourHour);
+
+	// create 3d menu item
+	MenuItem threeD;
+	threeD.ItemValue = DisplayMain::Showing3D;
+	threeD.Load("../icons/3D.bmp", 50, 11);
+	menuItems.push_back(threeD);
+
+	// create binary menu item
+	MenuItem binary;
+	binary.ItemValue = DisplayMain::ShowingBinary;
+	binary.Load("../icons/Binary.bmp", 70, 11);
+	menuItems.push_back(binary);
+
+	// create dateTime
+	MenuItem date;
+	date.ItemValue = DisplayMain::ShowingDate;
+	date.Load("../icons/DateTime.bmp", 90, 11);
+	menuItems.push_back(date);
+
+	// create history
+	MenuItem history;
+	history.ItemValue = DisplayMain::ShowingEvents;
+	history.Load("../icons/History.bmp", 10, 37);
+	menuItems.push_back(history);
+
+	// create image viewer
+	MenuItem imageViewer;
+	imageViewer.ItemValue = DisplayMain::ShowingImageViewer;
+	imageViewer.Load("../icons/ImageViewer.bmp", 30, 37);
+	menuItems.push_back(imageViewer);
+
+	// create paint
+	MenuItem paint;
+	paint.ItemValue = DisplayMain::ShowingPaint;
+	paint.Load("../icons/Paint.bmp", 50, 37);
+	menuItems.push_back(paint);
+
+	// create progress
+	MenuItem progress;
+	progress.ItemValue = DisplayMain::ShowingProgress;
+	progress.Load("../icons/Progress.bmp", 70, 37);
+	menuItems.push_back(progress);
+
+	// create config
+	MenuItem config;
+	config.ItemValue = DisplayMain::ShowingConfig;
+	config.Load("../icons/Config.bmp", DisplayMain::SCREEN_WIDTH - config.GetWidth() - 1, DisplayMain::SCREEN_HEIGHT - config.GetHeight() - 1);
+	menuItems.push_back(config);
+
+	// create exit
+	MenuItem exit;
+	exit.ItemValue = DisplayMain::Exiting;
+	exit.Load("../icons/Exit.bmp", DisplayMain::SCREEN_WIDTH - config.GetWidth() - 1, 0);
+	menuItems.push_back(exit);
+}
+
+DisplayMain::GameState MainMenu::Show(rgb_matrix::RGBMatrix* matrix, rgb_matrix::FrameCanvas* canvas)
+{
+	for(auto item : menuItems)
+	{
+		item.Draw(canvas);
+	}
 
     canvas = matrix->SwapOnVSync(canvas);
 
-    return GetMenuResponse();
+	DisplayMain::GameState result = DisplayMain::Noop;
+
+	while (result == DisplayMain::Noop)
+	{
+		result = GetMenuResponse();
+	}
+
+	return result;
 }
 
-MainMenu::MenuResult MainMenu::HandleClick(int x, int y)
+DisplayMain::GameState MainMenu::HandleClick(int x, int y)
 {
-    if (y < 32)
-    {
-        return Play;
-    }
+	// Loop through each menu option to determine if it was clicked
+	for(auto item : menuItems)
+	{
+		if (item.IsClicked(x, y))
+		{
+			return item.ItemValue;
+		}
+	}
 
-    return Exit;
+	return DisplayMain::Noop;
 }
 
-MainMenu::MenuResult MainMenu::GetMenuResponse()
+DisplayMain::GameState MainMenu::GetMenuResponse()
 {
     while(true)
     {
