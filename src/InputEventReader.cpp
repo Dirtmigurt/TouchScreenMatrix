@@ -39,12 +39,38 @@ bool InputEventReader::IsExiting()
 
 void InputEventReader::ReadLoop() 
 {
-	// Open device
-	int fd = open("/dev/input/event2", O_RDONLY | O_CLOEXEC);
-	if (fd == -1)
+	int fd;
+	for(int i = 0; i < 10; i++)
 	{
-		fprintf(stderr, "%s is not a valid device\n", "/dev/input/event2");
-		while (true) {};
+		// Test devices using evtest /dev/input/eventX
+		// Open device
+		char eventFileName[128];
+		sprintf(eventFileName, "/dev/input/event%d", i);
+		fd = open(eventFileName, O_RDONLY | O_CLOEXEC);
+		if (fd == -1)
+		{
+			fprintf(stderr, "%s is not a valid device\n", eventFileName);
+		}
+		else
+		{
+			struct input_id device_info{};
+			ioctl(fd, EVIOCGID, &device_info);
+			printf("File: %s  Vendor: %04hx  Product: %04hx  Version: %04hx\n", eventFileName, device_info.vendor, device_info.product, device_info.version);
+			if (device_info.vendor == VENDOR_ID_3M && device_info.product == PRODUCT_ID_TOUCH_SCREEN)
+			{
+				break;
+			}
+
+			close(fd);
+			fd = -1;
+		}
+	}
+
+	// If the above for loop completed with fd == -1, then no 3M Touchscreen is attached
+	while (fd == -1)
+	{
+		// Sleep for 10s so we dont burn cpu busy waiting on nothing.
+		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 	}
 
 	int xValue = -1;
@@ -82,6 +108,8 @@ void InputEventReader::ReadLoop()
 						std::unique_lock<std::mutex> queueLock(eventListMutex);
 						inputEventQueue.push(inEvent);
 					}
+
+					printf("Touch Event -- X: %d, Y: %d, State: %d\n", inEvent->PositionX, inEvent->PositionY, inEvent->State);
 				}
 
 				xValue = -1;

@@ -6,6 +6,6 @@ class BootScreen
 {
 public:
 	void Load();
-	void Show(rgb_matrix::RGBMatrix*, rgb_matrix::FrameCanvas*);
+	void Show();
 	VisibleObject bootImage;
 };

@@ -13,7 +13,7 @@ public:
 	int GetObjectCount() const;
 	VisibleObject* Get(std::string name) const;
 
-	void DrawAll(rgb_matrix::Canvas& canvas);
+	void DrawAll(rgb_matrix::Canvas* canvas);
 	void UpdateAll(std::chrono::system_clock::time_point now);
 
 private:

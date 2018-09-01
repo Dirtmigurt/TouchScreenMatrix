@@ -7,7 +7,7 @@ class MainMenu
 
 public:
 	void Load();
-	DisplayMain::GameState Show(rgb_matrix::RGBMatrix*, rgb_matrix::FrameCanvas*);
+	DisplayMain::GameState Show();
 
 private:
 	DisplayMain::GameState GetMenuResponse();

@@ -43,7 +43,7 @@ VisibleObject * VisibleObjectManager::Get(std::string name) const
 	return nullptr;
 }
 
-void VisibleObjectManager::DrawAll(rgb_matrix::Canvas & canvas)
+void VisibleObjectManager::DrawAll(rgb_matrix::Canvas * canvas)
 {
 	for(auto item : visibleObjects)
 	{

@@ -1,5 +1,8 @@
 #pragma once
 
+#define VENDOR_ID_3M 0x0596
+#define PRODUCT_ID_TOUCH_SCREEN 0x0001
+
 // System libraries
 #include<thread>
 #include<memory>
@@ -8,7 +11,7 @@
 #include<chrono>
 #include<cmath>
 #include<string>
-#include <algorithm>
+#include<algorithm>
 #include<linux/input.h>
 #include<fcntl.h>
 #include<unistd.h>

@@ -2,7 +2,7 @@
 
 // Initialize static members
 DisplayMain::GameState DisplayMain::gameState = Uninitialized;
-std::chrono::high_resolution_clock::time_point lastFrameTime = std::chrono::high_resolution_clock::now();
+std::chrono::high_resolution_clock::time_point DisplayMain::lastFrameTime = std::chrono::high_resolution_clock::now();
 rgb_matrix::RGBMatrix* DisplayMain::mainWindow = nullptr;
 rgb_matrix::FrameCanvas* DisplayMain::off_screen_canvas = nullptr;
 void DisplayMain::Start()
@@ -22,6 +22,7 @@ void DisplayMain::Start()
     matrix_options.parallel = 1;
     matrix_options.hardware_mapping = "adafruit-hat-pwm";
     matrix_options.brightness = 50;
+    matrix_options.led_rgb_sequence = "rbg";
     mainWindow = rgb_matrix::CreateMatrixFromOptions(matrix_options, runtime_opt);
     off_screen_canvas = mainWindow->CreateFrameCanvas();
 
@@ -42,9 +43,19 @@ bool DisplayMain::IsExiting()
     return gameState == DisplayMain::Exiting;
 }
 
-rgb_matrix::RGBMatrix& DisplayMain::GetWindow()
+rgb_matrix::RGBMatrix* DisplayMain::GetWindow()
 {
-    return *mainWindow;
+    return mainWindow;
+}
+
+rgb_matrix::FrameCanvas* DisplayMain::GetCanvas()
+{
+    return off_screen_canvas;
+}
+
+void DisplayMain::SetCanvas(rgb_matrix::FrameCanvas* canvas)
+{
+    off_screen_canvas = canvas;
 }
 
 // GameObjectManager& DisplayMain::GetGameObjectManager()
@@ -59,28 +70,34 @@ void DisplayMain::GameLoop()
     {
         case ShowingBootScreen:
         {
+            printf("Showing Boot Screen.\n");
             ShowBootScreen();
             break;
         }
         case ShowingMenu:
         {
+            printf("Showing Menu.\n");
             ShowMenu();
             break;
         }
         case Showing12H:
         {
+            printf("Showing 12H\n");
 			break;
         }
 		case Showing24H:
 		{
+            printf("Showing 24H.\n");
 			break;
 	    }
 		case Showing3D:
 		{
+            printf("Showing 3D.\n");
 			break;
 		}
 		case ShowingBinary:
 		{
+            printf("Showing Binary.\n");
 			break;
 		}
 		case ShowingDate:
@@ -120,7 +137,9 @@ void DisplayMain::ShowBootScreen()
 {
 	BootScreen bootScreen;
 	bootScreen.Load();
-    bootScreen.Show(mainWindow, off_screen_canvas);
+    printf("bootScreenLoaded\n");
+    bootScreen.Show();
+    printf("bootScreen.Show returned.\n");
     gameState = ShowingMenu;
 }
 
@@ -128,5 +147,7 @@ void DisplayMain::ShowMenu()
 {
     MainMenu mainMenu;
 	mainMenu.Load();
-    gameState = mainMenu.Show(mainWindow, off_screen_canvas);
+    printf("mainMenu loaded\n");
+    gameState = mainMenu.Show();
+    printf("mainMenu.Show returned.\n");
 }

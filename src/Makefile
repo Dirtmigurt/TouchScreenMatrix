@@ -17,10 +17,10 @@ LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 #$(RGB_LIBRARY): FORCE
 #	$(MAKE) -C $(RGB_LIBDIR)
 
-_DEPS = InputEvent.h InputEventReader.h BootScreen.h MainMenu.h DisplayMain.h Point.h VisibleObject.h VisibleObjectManager.h
+_DEPS = InputEvent.h InputEventReader.h BootScreen.h MainMenu.h MenuItem.h DisplayMain.h Point.h VisibleObject.h VisibleObjectManager.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o InputEvent.o InputEventReader.o BootScreen.o MainMenu.o DisplayMain.o Point.o VisibleObject.o VisibleObjectManager.o
+_OBJ = main.o InputEvent.o InputEventReader.o BootScreen.o MainMenu.o MenuItem.o DisplayMain.o VisibleObject.o VisibleObjectManager.o
 OBJ  = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c* $(DEPS)

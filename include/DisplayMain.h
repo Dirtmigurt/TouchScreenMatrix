@@ -5,7 +5,9 @@ class DisplayMain
 {
     public:
         static void Start();
-        static rgb_matrix::RGBMatrix& GetWindow();
+        static rgb_matrix::RGBMatrix* GetWindow();
+		static rgb_matrix::FrameCanvas* GetCanvas();
+		static void SetCanvas(rgb_matrix::FrameCanvas*);
         //const static GameObjectManager& GetGameObjectManager();
 
 		static std::chrono::high_resolution_clock::time_point lastFrameTime;
