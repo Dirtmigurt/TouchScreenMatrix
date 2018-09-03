@@ -85,6 +85,7 @@ void DisplayMain::GameLoop()
         case Showing12H:
         {
             printf("Showing 12H\n");
+			Show12H();
             gameState = ShowingMenu;
 			break;
         }
@@ -166,4 +167,12 @@ void DisplayMain::ShowMenu()
     MainMenu mainMenu;
 	mainMenu.Load();
     gameState = mainMenu.Show();
+}
+
+void DisplayMain::Show12H()
+{
+	TwelveHour screen;
+	screen.Load();
+	screen.Show();
+	gameState = ShowingMenu;
 }

@@ -47,8 +47,7 @@ class DisplayMain
 
         static void ShowBootScreen();
         static void ShowMenu();
-
-
+		static void Show12H();
 
         static GameState gameState;
         static rgb_matrix::RGBMatrix* mainWindow;

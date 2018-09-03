@@ -63,6 +63,7 @@ void MainMenu::Load()
 	menuItems.push_back(config);
 }
 
+// Should only return when the Menu is done being shown.
 DisplayMain::GameState MainMenu::Show()
 {
 	rgb_matrix::FrameCanvas*  canvas = DisplayMain::GetCanvas();
