@@ -35,6 +35,8 @@ void DisplayMain::Start()
         GameLoop();
     }
 
+    printf("killing input event reader.\n");
+    InputEventReader::Kill();
     delete mainWindow;
 }
 
@@ -83,49 +85,67 @@ void DisplayMain::GameLoop()
         case Showing12H:
         {
             printf("Showing 12H\n");
+            gameState = ShowingMenu;
 			break;
         }
 		case Showing24H:
 		{
             printf("Showing 24H.\n");
+            gameState = ShowingMenu;
 			break;
 	    }
 		case Showing3D:
 		{
             printf("Showing 3D.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingBinary:
 		{
             printf("Showing Binary.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingDate:
 		{
+            printf("Showing DateTime.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingEvents:
 		{
+            printf("Showing History events.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingImageViewer:
 		{
+            printf("Showing Image Viewer.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingPaint:
 		{
+            printf("Showing Paint.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingProgress:
 		{
+            printf("Showing Progress Bars.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case ShowingConfig:
 		{
+            printf("Showing Config.\n");
+            gameState = ShowingMenu;
 			break;
 		}
 		case Exiting:
 		{
+            printf("Showing Exiting.\n");
+            gameState = ShowingMenu;
 			break;
 		}
     default: 
@@ -137,9 +157,7 @@ void DisplayMain::ShowBootScreen()
 {
 	BootScreen bootScreen;
 	bootScreen.Load();
-    printf("bootScreenLoaded\n");
     bootScreen.Show();
-    printf("bootScreen.Show returned.\n");
     gameState = ShowingMenu;
 }
 
@@ -147,7 +165,5 @@ void DisplayMain::ShowMenu()
 {
     MainMenu mainMenu;
 	mainMenu.Load();
-    printf("mainMenu loaded\n");
     gameState = mainMenu.Show();
-    printf("mainMenu.Show returned.\n");
 }

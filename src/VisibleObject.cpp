@@ -32,7 +32,7 @@ void VisibleObject::Load(std::string filename, int x, int y)
 	const int width = *(int*)&info[4];
 	const int height = *(int*)&info[8];
 
-	printf("Loaded %s with Width=%d, Height=%d\n", cstyleFilename, width, height);
+	//printf("Loaded %s with Width=%d, Height=%d\n", cstyleFilename, width, height);
 	//const int row_padded = (width * 3 + 3) & (~3);
 	const int row_padded = (width * 3 + 3) & (~3);
 	auto* data = new unsigned char[row_padded];
@@ -45,7 +45,7 @@ void VisibleObject::Load(std::string filename, int x, int y)
 		{
 			// Convert (B, G, R) to (R, G, B)
 			rgb_matrix::Color pixel(data[j+2], data[j + 1], data[j]);
-			printf("X = %d, Y = %d, Color(RGB) = %d, %d, %d\n", j/3, i, pixel.r, pixel.g, pixel.b);
+			//printf("X = %d, Y = %d, Color(RGB) = %d, %d, %d\n", j/3, i, pixel.r, pixel.g, pixel.b);
 			ImageData[i].push_back(pixel);
 		}
 	}

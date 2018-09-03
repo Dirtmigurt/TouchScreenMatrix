@@ -7,7 +7,6 @@ void MainMenu::Load()
 	twelveHour.ItemValue = DisplayMain::Showing12H;
 	twelveHour.Load("../icons/12H.bmp", 10, 11);
 	menuItems.push_back(twelveHour);
-	printf("loaded ../icons/12H.bmp\n");
 
 	// create 24h menu item
 	MenuItem twentyfourHour;
@@ -60,19 +59,14 @@ void MainMenu::Load()
 	// create config
 	MenuItem config;
 	config.ItemValue = DisplayMain::ShowingConfig;
-	config.Load("../icons/Config.bmp", DisplayMain::SCREEN_WIDTH - 15 - 1, DisplayMain::SCREEN_HEIGHT - 15 - 1);
+	config.Load("../icons/Config.bmp", 90, 37);
 	menuItems.push_back(config);
-
-	// create exit
-	MenuItem exit;
-	exit.ItemValue = DisplayMain::Exiting;
-	exit.Load("../icons/Exit.bmp", DisplayMain::SCREEN_WIDTH - 15 - 1, 0);
-	menuItems.push_back(exit);
 }
 
 DisplayMain::GameState MainMenu::Show()
 {
 	rgb_matrix::FrameCanvas*  canvas = DisplayMain::GetCanvas();
+	canvas->Clear();
 	for(auto item : menuItems)
 	{
 		item.Draw(canvas);
@@ -115,5 +109,9 @@ DisplayMain::GameState MainMenu::GetMenuResponse()
         {
             return HandleClick(currentEvent->PositionX, currentEvent->PositionY);
         }
+		else if (currentEvent != nullptr)
+		{
+			//printf("Not a click, X=%d, Y=%d, State=%d\n", currentEvent->PositionX, currentEvent->PositionY, currentEvent->State);
+		}
     }
 }
