@@ -59,7 +59,7 @@ void VisibleObject::Load(std::string filename, int x, int y)
 
 void VisibleObject::Draw(rgb_matrix::Canvas* canvas, rgb_matrix::Color whiteReplace)
 {
-	if (_isLoaded && whiteReplace.r > 0 && whiteReplace.g > 0 && whiteReplace.b > 0)
+	if (_isLoaded && (whiteReplace.r > 0 || whiteReplace.g > 0 || whiteReplace.b > 0))
 	{
 		int canvasY = PositionY;
 		// draw this onto canvas
@@ -70,7 +70,7 @@ void VisibleObject::Draw(rgb_matrix::Canvas* canvas, rgb_matrix::Color whiteRepl
 			{
 				if (canvasX >= 0 && canvasX <= DisplayMain::SCREEN_WIDTH && canvasY >= 0 && canvasY <= DisplayMain::SCREEN_HEIGHT)
 				{
-					if (pixel.r == pixel.b && pixel.r == pixel.g)
+					if (pixel.r == pixel.b && pixel.r == pixel.g && pixel.r > 0)
 					{
 						canvas->SetPixel(canvasX, canvasY, whiteReplace.r, whiteReplace.g, whiteReplace.b);
 					}

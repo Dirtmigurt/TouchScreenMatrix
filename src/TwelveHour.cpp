@@ -88,14 +88,16 @@ void TwelveHour::DrawScreen()
 void TwelveHour::DrawClockText(rgb_matrix::FrameCanvas* canvas, int x, int y, rgb_matrix::Color color, char * text)
 {
 	int i = 0;
-	while(text[i] != NULL)
+	while(text[i] != '\0')
 	{
+		printf("printing char %c\n", text[i]);
 		// draw the char text[i] at (x,y) with the given color
 		VisibleObject * obj = clockFont.find(text[i])->second;
 
 		obj->SetPosition(x, y);
 		obj->Draw(canvas, color);
 		x += obj->GetWidth() + 4;
+		i++;
 	}
 }
 
