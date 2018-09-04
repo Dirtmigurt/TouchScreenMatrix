@@ -8,7 +8,7 @@ public:
 	virtual ~VisibleObject();
 
 	virtual void Load(std::string filename, int = 0, int = 0);
-	virtual void Draw(rgb_matrix::Canvas* canvas);
+	virtual void Draw(rgb_matrix::Canvas* canvas, rgb_matrix::Color whiteReplace = rgb_matrix::Color(0, 0, 0));
 	virtual void Update(double elapsedTime);
 
 	virtual void SetPosition(double x, double y);

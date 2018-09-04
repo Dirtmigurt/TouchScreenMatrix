@@ -1,10 +1,32 @@
 #include"../include/stdafx.h"
 
+TwelveHour::~TwelveHour()
+{
+	for(auto pair : clockFont)
+	{
+		delete pair.second;
+	}
+}
+
 void TwelveHour::Load()
 {
 	backButton.Load("../icons/Back9x9.bmp", 0, 0);
 	backButton.ItemValue = DisplayMain::Exiting;
-	timeFont.LoadFont("../fonts/27x54B.bdf");
+
+	// set up visible object for 0, 1, 2, ... 9 + :
+
+	for (int i = 0; i < 10; i++)
+	{
+		char filename[256];
+		sprintf(filename, "../clockImages/%d.bmp", i);
+		VisibleObject* obj = new VisibleObject();
+		obj->Load(filename, 0, 0);
+		clockFont.insert(std::pair<int, VisibleObject*>(i + '0', obj));
+	}
+
+	VisibleObject* obj = new VisibleObject();
+	obj->Load("../clockImages/Colon.bmp", 0, 0);
+	clockFont.insert(std::pair<int, VisibleObject*>(':', obj));
 }
 
 // Should only return when TwelveHour is done being shown.
@@ -57,10 +79,24 @@ void TwelveHour::DrawScreen()
 	int max = std::max(red, green);
 	max = std::max(max, blue);
 	double scale = 255.0 / std::max(1, max);
-	rgb_matrix::DrawText(canvas, timeFont, 0, 45, rgb_matrix::Color(red * scale, green * scale, blue * scale), buffer);
+	DrawClockText(canvas, 0, 45, rgb_matrix::Color(red * scale, green * scale, blue * scale), buffer);
 
 	canvas = DisplayMain::GetWindow()->SwapOnVSync(canvas);
 	DisplayMain::SetCanvas(canvas);
+}
+
+void TwelveHour::DrawClockText(rgb_matrix::FrameCanvas* canvas, int x, int y, rgb_matrix::Color color, char * text)
+{
+	int i = 0;
+	while(text[i] != NULL)
+	{
+		// draw the char text[i] at (x,y) with the given color
+		VisibleObject * obj = clockFont.find(text[i])->second;
+
+		obj->SetPosition(x, y);
+		obj->Draw(canvas, color);
+		x += obj->GetWidth() + 4;
+	}
 }
 
 DisplayMain::GameState TwelveHour::HandleClick(int x, int y)
