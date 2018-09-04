@@ -34,4 +34,4 @@
 #include "VisibleObject.h"
 #include "VisibleObjectManager.h"
 #include "MenuItem.h"
-#include "Twelvehour.h"
+#include "TwelveHour.h"

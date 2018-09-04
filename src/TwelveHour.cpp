@@ -4,7 +4,7 @@ void TwelveHour::Load()
 {
 	backButton.Load("../icons/Back9x9.bmp", 0, 0);
 	backButton.ItemValue = DisplayMain::Exiting;
-	timeFont.LoadFont("../fonts/9x18B.bdf");
+	timeFont.LoadFont("../fonts/20x40.bdf");
 }
 
 // Should only return when TwelveHour is done being shown.
@@ -44,7 +44,7 @@ void TwelveHour::DrawScreen()
 	hour = hour == 0 ? 12 : hour;
 	int minute = timePtr->tm_min;
 	char buffer[10];
-	sprintf(buffer, "%d:%d", hour, minute);
+	sprintf(buffer, "%d:%02d", hour, minute);
 	redCounter += 1;
 	greenCounter += 3;
 	blueCounter += 5;
