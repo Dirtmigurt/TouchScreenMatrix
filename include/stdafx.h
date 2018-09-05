@@ -35,3 +35,4 @@
 #include "VisibleObjectManager.h"
 #include "MenuItem.h"
 #include "TwelveHour.h"
+#include "HistoryEvents.h"

@@ -14,7 +14,6 @@ void TwelveHour::Load()
 	backButton.ItemValue = DisplayMain::Exiting;
 
 	// set up visible object for 0, 1, 2, ... 9 + :
-
 	for (int i = 0; i < 10; i++)
 	{
 		char filename[256];
@@ -65,38 +64,57 @@ void TwelveHour::DrawScreen()
 	// Draw the time
 	time_t t = time(nullptr);
 	tm* timePtr = localtime(&t);
-	int hour = timePtr->tm_hour % 12;
-	hour = hour == 0 ? 12 : hour;
+	int hour = timePtr->tm_hour;
+	if (ShowTwelve)
+	{
+		hour = hour % 12;
+		hour = hour == 0 ? 12 : hour;
+	}
+
 	int minute = timePtr->tm_min;
 	char buffer[10];
 	sprintf(buffer, "%d:%02d", hour, minute);
-	redCounter = (redCounter + 1) % 360;
-	greenCounter = (greenCounter + 3) % 360;
-	blueCounter = (blueCounter + 5) % 360;
-	int red = 255 * (cos(redCounter * 0.017453) + 1) / 2;
-	int green = 255 * (cos(greenCounter * 0.017453) + 1) / 2;
-	int blue = 255 * (cos(blueCounter * 0.017453) + 1) / 2;
-	int max = std::max(red, green);
-	max = std::max(max, blue);
-	double scale = 255.0 / std::max(1, max);
-	DrawClockText(canvas, 0, 45, rgb_matrix::Color(red * scale, green * scale, blue * scale), buffer);
+	hueCounter += 0.25;
+	DrawClockText(canvas, HueToRGBColor(hueCounter), buffer);
 
 	canvas = DisplayMain::GetWindow()->SwapOnVSync(canvas);
 	DisplayMain::SetCanvas(canvas);
 }
 
-void TwelveHour::DrawClockText(rgb_matrix::FrameCanvas* canvas, int x, int y, rgb_matrix::Color color, char * text)
+void TwelveHour::DrawClockText(rgb_matrix::FrameCanvas* canvas, rgb_matrix::Color color, char * text)
 {
 	int i = 0;
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	while (text[i] != '\0')
+	{
+		width += clockFont.find(text[i])->second->GetWidth();
+		y = std::max(y, static_cast<int>(clockFont.find(text[i])->second->GetHeight()));
+		i++;
+	}
+
+	width += 2 * (strlen(text) - 1);
+	x = (DisplayMain::SCREEN_WIDTH - width) / 2;
+	y = (DisplayMain::SCREEN_HEIGHT - y) / 2;
+
+	i = 0;
 	while(text[i] != '\0')
 	{
-		printf("printing char %c\n", text[i]);
 		// draw the char text[i] at (x,y) with the given color
 		VisibleObject * obj = clockFont.find(text[i])->second;
 
-		obj->SetPosition(x, y);
+		if (text[i] == ':')
+		{
+			obj->SetPosition(x, y + 10);
+		}
+		else
+		{
+			obj->SetPosition(x, y);
+		}
+		
 		obj->Draw(canvas, color);
-		x += obj->GetWidth() + 4;
+		x += obj->GetWidth() + 2;
 		i++;
 	}
 }
@@ -122,4 +140,55 @@ bool TwelveHour::RecentClick()
 
 	// A click was recent if it occurred within the last 10 seconds.
 	return (nowMillis - lastClickMillis) < 10000;
+}
+
+rgb_matrix::Color TwelveHour::HueToRGBColor(double& hue)
+{
+	hue = DoubleMod(hue, 360.0);
+	double x = ((DoubleMod(hue, 60.0)) / 60.0) * 255.0;
+	rgb_matrix::Color returnColor(0, 0, 0);
+	if (hue >= 0 && hue < 60)
+	{
+		returnColor.r = 255;
+		returnColor.g = static_cast<int>(x);
+		returnColor.b = 0;
+	}
+	else if (hue >= 60 && hue < 120)
+	{
+		returnColor.r = 255 - static_cast<int>(x);
+		returnColor.g = 255;
+		returnColor.b = 0;
+	}
+	else if (hue >= 120 && hue < 180)
+	{
+		returnColor.r = 0;
+		returnColor.g = 255;
+		returnColor.b = x;
+	}
+	else if (hue >= 180 && hue < 240)
+	{
+		returnColor.r = 0;
+		returnColor.g = 255 - static_cast<int>(x);
+		returnColor.b = 255;
+	}
+	else if (hue >= 240 && hue < 300)
+	{
+		returnColor.r = x;
+		returnColor.g = 0;
+		returnColor.b = 255;
+	}
+	else if (hue >= 300 && hue < 360)
+	{
+		returnColor.r = 255;
+		returnColor.g = 0;
+		returnColor.b = 255 - static_cast<int>(x);
+	}
+
+	return returnColor;
+}
+
+double TwelveHour::DoubleMod(double x, double y)
+{
+	int result = static_cast<int>(x / y);
+	return x - static_cast<double>(result) * y;
 }

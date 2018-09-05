@@ -7,17 +7,18 @@ public:
 	~TwelveHour();
 	void Load();
 	void Show();
+	bool ShowTwelve = true;
 
 private:
 	void DrawScreen();
-	void DrawClockText(rgb_matrix::FrameCanvas*, int, int, rgb_matrix::Color, char*);
+	void DrawClockText(rgb_matrix::FrameCanvas*, rgb_matrix::Color, char*);
 	bool RecentClick();
 	DisplayMain::GameState HandleClick(int x, int y);
+	static rgb_matrix::Color HueToRGBColor(double& hue);
+	static double DoubleMod(double x, double y);
 	MenuItem backButton;
 	rgb_matrix::Font timeFont;
-	int redCounter = 0;
-	int greenCounter = 0;
-	int blueCounter = 0;
+	double hueCounter = 0;
 	long long lastClickMillis = 0;
 	std::map<int, VisibleObject*> clockFont;
 

@@ -86,13 +86,12 @@ void DisplayMain::GameLoop()
         {
             printf("Showing 12H\n");
 			Show12H();
-            gameState = ShowingMenu;
 			break;
         }
 		case Showing24H:
 		{
             printf("Showing 24H.\n");
-            gameState = ShowingMenu;
+            Show24H();
 			break;
 	    }
 		case Showing3D:
@@ -116,7 +115,7 @@ void DisplayMain::GameLoop()
 		case ShowingEvents:
 		{
             printf("Showing History events.\n");
-            gameState = ShowingMenu;
+            ShowHistory();
 			break;
 		}
 		case ShowingImageViewer:
@@ -175,4 +174,21 @@ void DisplayMain::Show12H()
 	screen.Load();
 	screen.Show();
 	gameState = ShowingMenu;
+}
+
+void DisplayMain::Show24H()
+{
+	TwelveHour screen;
+	screen.Load();
+    screen.ShowTwelve = false;
+	screen.Show();
+	gameState = ShowingMenu;
+}
+
+void DisplayMain::ShowHistory()
+{
+    HistoryEvents screen;
+    screen.Load();
+    screen.Show();
+    gameState = ShowingMenu;
 }
