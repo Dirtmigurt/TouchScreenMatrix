@@ -7,6 +7,8 @@ public:
 	~TwelveHour();
 	void Load();
 	void Show();
+	static rgb_matrix::Color HueToRGBColor(double& hue);
+	static double DoubleMod(double x, double y);
 	bool ShowTwelve = true;
 
 private:
@@ -14,8 +16,6 @@ private:
 	void DrawClockText(rgb_matrix::FrameCanvas*, rgb_matrix::Color, char*);
 	bool RecentClick();
 	DisplayMain::GameState HandleClick(int x, int y);
-	static rgb_matrix::Color HueToRGBColor(double& hue);
-	static double DoubleMod(double x, double y);
 	MenuItem backButton;
 	rgb_matrix::Font timeFont;
 	double hueCounter = 0;

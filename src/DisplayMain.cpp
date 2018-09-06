@@ -28,7 +28,7 @@ void DisplayMain::Start()
 
     // Add game objects to the object manager
 
-    gameState = DisplayMain::ShowingBootScreen;
+    gameState = DisplayMain::ShowingEvents;
 
     while(!IsExiting())
     {

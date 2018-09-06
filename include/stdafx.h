@@ -12,6 +12,7 @@
 #include<cmath>
 #include<string>
 #include<algorithm>
+#include<fstream>
 #include<linux/input.h>
 #include<string.h>
 #include<fcntl.h>
