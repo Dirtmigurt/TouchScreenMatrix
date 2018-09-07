@@ -63,6 +63,7 @@ void HistoryEvents::Load()
         factVector.push_back(str);
     }
 
+    factIndex = rand() % factVector.size();
     inFile.close();
 }
 
@@ -148,6 +149,7 @@ void HistoryEvents::DrawScreen()
         {
             factVector.push_back(line);
         }
+        factIndex = rand() % factVector.size();
         inFile.close();
         factIndex = 0;
     }

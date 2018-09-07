@@ -14,6 +14,7 @@
 #include<algorithm>
 #include<fstream>
 #include<linux/input.h>
+#include<stdlib.h>
 #include<string.h>
 #include<fcntl.h>
 #include<unistd.h>
@@ -37,3 +38,5 @@
 #include "MenuItem.h"
 #include "TwelveHour.h"
 #include "HistoryEvents.h"
+#include "BinaryClock.h"
+#include "Paint.h"

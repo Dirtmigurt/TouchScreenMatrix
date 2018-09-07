@@ -50,6 +50,8 @@ class DisplayMain
 		static void Show12H();
 		static void Show24H();
 		static void ShowHistory();
+		static void ShowBinary();
+		static void ShowPaint();
 
         static GameState gameState;
         static rgb_matrix::RGBMatrix* mainWindow;

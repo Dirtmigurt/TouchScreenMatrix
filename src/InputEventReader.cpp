@@ -92,71 +92,10 @@ void InputEventReader::ReadLoop()
 		{
 			continue;
 		}
-
-		switch(currentState)
+		else
 		{
-			case Nothing:
-			{
-				// How do you handle a down/drag/up from state of nothing
-				for(auto ev : eventChain)
-				{
-					delete ev;
-				}
-
-				eventChain.clear();
-
-				if (eventPointer->State == InputEvent::Down)
-				{
-					eventChain.push_back(eventPointer);
-					currentState = Down;
-				}
-				else if (eventPointer->State == InputEvent::Hold)
-				{
-					eventChain.push_back(eventPointer);
-					currentState = Hold;
-				}
-				else
-				{
-					delete eventPointer;
-				}
-
-				break;
-			}
-			case Down:
-			case Hold:
-			{
-				// From a down/hold event only hold and up are possible
-				if (eventPointer->State == InputEvent::Down)
-				{
-					currentState = Nothing;
-				}
-				else if (eventPointer->State == InputEvent::Hold && AreEventsContinuous(eventChain.back(), eventPointer))
-				{
-					eventChain.push_back(eventPointer);
-
-					// if eventChain.size() >= 3 then we need to create a real event out of it
-					if (eventChain.size() >= 3)
-					{
-						std::unique_lock<std::mutex> queueLock(eventListMutex);
-						inputEventQueue.push(eventChain.front());
-						eventChain.erase(eventChain.begin());
-						currentState = Nothing;
-						//printf("Queueing: X = %d, Y = %d, Type = %d\n", eventPointer->PositionX, eventPointer->PositionY, eventPointer->State);
-					}
-
-					// skip the delete
-					break;
-				}
-				else if (eventPointer->State == InputEvent::Up)
-				{
-					currentState = Nothing;
-				}
-
-				delete eventPointer;
-				break;
-			}
-			default:
-				break;
+			std::unique_lock<std::mutex> queueLock(eventListMutex);
+			inputEventQueue.push(eventPointer);
 		}
 	}
 

@@ -57,6 +57,23 @@ void VisibleObject::Load(std::string filename, int x, int y)
 	_isLoaded = true;
 }
 
+// Initialize a visible object as a square of all the same color.
+void VisibleObject::Load(rgb_matrix::Color color, int width, int height)
+{
+	for(int i = 0; i < height; i++)
+	{
+		ImageData.emplace_back();
+		for(int j = 0; j < width; j++)
+		{
+			ImageData[i].push_back(color);
+		}
+	}
+
+	PositionX = 0;
+	PositionY = 0;
+	_isLoaded = true;
+}
+
 void VisibleObject::Draw(rgb_matrix::Canvas* canvas, rgb_matrix::Color whiteReplace)
 {
 	if (_isLoaded && (whiteReplace.r > 0 || whiteReplace.g > 0 || whiteReplace.b > 0))
@@ -140,7 +157,15 @@ float VisibleObject::GetHeight() const
 
 float VisibleObject::GetWidth() const
 {
-	return ImageData[0].size();
+	return ImageData.size() > 0 ? ImageData[0].size() : 0;
+}
+
+rgb_matrix::Color VisibleObject::GetPixel(uint x, uint y)
+{
+	x = std::min(x, static_cast<uint>(GetWidth() - 1));
+	y = std::min(y, static_cast<uint>(GetHeight() - 1));
+
+	return ImageData[y][x];
 }
 
 bool VisibleObject::IsLoaded() const

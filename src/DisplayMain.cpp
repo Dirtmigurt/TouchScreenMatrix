@@ -12,6 +12,7 @@ void DisplayMain::Start()
         return;
     }
 
+    srand(time(NULL));
     // Initialize RGBMatrix
     rgb_matrix::RGBMatrix::Options matrix_options;
     rgb_matrix::RuntimeOptions runtime_opt;
@@ -26,9 +27,7 @@ void DisplayMain::Start()
     mainWindow = rgb_matrix::CreateMatrixFromOptions(matrix_options, runtime_opt);
     off_screen_canvas = mainWindow->CreateFrameCanvas();
 
-    // Add game objects to the object manager
-
-    gameState = DisplayMain::ShowingEvents;
+    gameState = DisplayMain::ShowingMenu;
 
     while(!IsExiting())
     {
@@ -103,7 +102,7 @@ void DisplayMain::GameLoop()
 		case ShowingBinary:
 		{
             printf("Showing Binary.\n");
-            gameState = ShowingMenu;
+            ShowBinary();
 			break;
 		}
 		case ShowingDate:
@@ -127,7 +126,7 @@ void DisplayMain::GameLoop()
 		case ShowingPaint:
 		{
             printf("Showing Paint.\n");
-            gameState = ShowingMenu;
+            ShowPaint();
 			break;
 		}
 		case ShowingProgress:
@@ -188,6 +187,22 @@ void DisplayMain::Show24H()
 void DisplayMain::ShowHistory()
 {
     HistoryEvents screen;
+    screen.Load();
+    screen.Show();
+    gameState = ShowingMenu;
+}
+
+void DisplayMain::ShowBinary()
+{
+    BinaryClock screen;
+    screen.Load();
+    screen.Show();
+    gameState = ShowingMenu;
+}
+
+void DisplayMain::ShowPaint()
+{
+    Paint screen;
     screen.Load();
     screen.Show();
     gameState = ShowingMenu;

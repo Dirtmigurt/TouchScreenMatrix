@@ -94,7 +94,9 @@ void TwelveHour::DrawClockText(rgb_matrix::FrameCanvas* canvas, rgb_matrix::Colo
 		i++;
 	}
 
+	// This is because we add 1 pixel column between each character
 	width += 2 * (strlen(text) - 1);
+	
 	x = (DisplayMain::SCREEN_WIDTH - width) / 2;
 	y = (DisplayMain::SCREEN_HEIGHT - y) / 2;
 

@@ -2,6 +2,7 @@
 
 void MainMenu::Load()
 {
+	printf("Starting MainMenu::Load\n");
 	// create 12h menu item
 	MenuItem twelveHour;
 	twelveHour.ItemValue = DisplayMain::Showing12H;
@@ -61,6 +62,8 @@ void MainMenu::Load()
 	config.ItemValue = DisplayMain::ShowingConfig;
 	config.Load("../icons/Config.bmp", 90, 37);
 	menuItems.push_back(config);
+
+	printf("Ending MainMenu::Load\n");
 }
 
 // Should only return when the Menu is done being shown.
